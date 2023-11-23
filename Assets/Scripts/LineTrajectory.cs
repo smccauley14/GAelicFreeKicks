@@ -17,16 +17,18 @@ public class LineTrajectory : MonoBehaviour
 
     private Vector3 initialPosition;
     private Vector3 endPosition;
+    private Vector3 defaultShotDirection;
     private float lastDistanceX = 0f;
     private float lastDistanceY = 0f;
     private float shotPower = 0f;
     private float yRange = 0;
-    private bool isPowerAdjustable = true;
+    public bool isPowerAdjustable = true;
 
     private void Start()
     {
         InitializeComponents();
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+
     }
 
     private void Update()
@@ -53,6 +55,7 @@ public class LineTrajectory : MonoBehaviour
         lastDistanceY = 0;
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+        defaultShotDirection = (lineRenderer.GetPosition(1) - lineRenderer.GetPosition(0)).normalized;
         powerSlider.onValueChanged.AddListener(HandlePowerAdjustment);
         ballRigidbody = ball.GetComponent<Rigidbody>();
     }
@@ -91,4 +94,15 @@ public class LineTrajectory : MonoBehaviour
             powerSlider.value = shotPower;
         }
     }
+
+    public void ResetLineAim()
+    {
+        // Reset the line to its default state
+        lastDistanceX = 0f;
+        lastDistanceY = 0f;
+        powerSlider.value = 0f;
+        UpdateLinePosition();  // Update the line position after resetting
+    }
 }
+
+    

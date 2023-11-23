@@ -9,12 +9,14 @@ public class BallController : MonoBehaviour
     private Rigidbody ball;
     private float angle;
     private Vector3 position;
+    private LineTrajectory lineTrajectory;
 
     private void Awake()
     {
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
         position = transform.position;
+        lineTrajectory = GameObject.Find("Line").GetComponent<LineTrajectory>();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -33,5 +35,7 @@ public class BallController : MonoBehaviour
         // You might also want to reset any velocity or other properties of the Rigidbody
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
+        lineTrajectory.isPowerAdjustable = true;
+        lineTrajectory.ResetLineAim();
     }
 }
