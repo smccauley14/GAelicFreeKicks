@@ -35,7 +35,10 @@ public class BallController : MonoBehaviour
         // You might also want to reset any velocity or other properties of the Rigidbody
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
+        Quaternion target = Quaternion.Euler(0, 0, 0);
+        transform.rotation = target;
         lineTrajectory.isPowerAdjustable = true;
         lineTrajectory.ResetLineAim();
+
     }
 }

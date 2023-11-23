@@ -55,6 +55,7 @@ public class LineTrajectory : MonoBehaviour
         lastDistanceY = 0;
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, new Vector3(0,1,0));
         defaultShotDirection = (lineRenderer.GetPosition(1) - lineRenderer.GetPosition(0)).normalized;
         powerSlider.onValueChanged.AddListener(HandlePowerAdjustment);
         ballRigidbody = ball.GetComponent<Rigidbody>();
@@ -97,11 +98,9 @@ public class LineTrajectory : MonoBehaviour
 
     public void ResetLineAim()
     {
-        // Reset the line to its default state
-        lastDistanceX = 0f;
-        lastDistanceY = 0f;
-        powerSlider.value = 0f;
-        UpdateLinePosition();  // Update the line position after resetting
+        lastDistanceX = 0;
+        lastDistanceY = 0;
+        UpdateLinePosition();
     }
 }
 
