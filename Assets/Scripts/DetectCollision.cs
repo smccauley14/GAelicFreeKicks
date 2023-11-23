@@ -13,7 +13,6 @@ public class DetectCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("test");
         if (gameObject.CompareTag("Point"))
         {
             manager.AddPoint();
