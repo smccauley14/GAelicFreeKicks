@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
     public float maxPower;
+    public Transform nets;
     private Rigidbody ball;
     private float angle;
     private Vector3 position;
@@ -31,7 +29,13 @@ public class BallController : MonoBehaviour
 
     private void ResetToOriginalPosition()
     {
-        transform.position = position;
+        // Generate a random position within a specified range
+        float randomX = Random.Range(-40, 40);
+        float randomY = Random.Range(0.5f, 0.5f);
+        float randomZ = Random.Range(-47, 61);
+
+        // Set the position of the ball to the random coordinates
+        transform.position = new Vector3(randomX, randomY, randomZ);
         // You might also want to reset any velocity or other properties of the Rigidbody
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
