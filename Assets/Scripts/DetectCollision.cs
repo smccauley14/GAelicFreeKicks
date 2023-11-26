@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class DetectCollision : MonoBehaviour
 {
-    private GameManager manager;
+    private ScoreManager scoreManager;
     // Start is called before the first frame update
     void Start()
     {
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (gameObject.CompareTag("Point"))
         {
-            manager.AddPoint();
+            scoreManager.hasPlayerScored = true;
+            scoreManager.AddPoint();
         }
 
         if (gameObject.CompareTag("Goal"))
         {
-            manager.AddGoal();
+            scoreManager.hasPlayerScored = true;
+            scoreManager.AddGoal();
         }
     }
 }

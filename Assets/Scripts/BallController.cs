@@ -4,6 +4,9 @@ public class BallController : MonoBehaviour
 {
     public float maxPower;
     public Transform nets;
+    public CameraController cameraFollow;
+    public LivesManager livesManager;
+    public PlayerController player;
     private Rigidbody ball;
     private float angle;
     private Vector3 position;
@@ -15,6 +18,9 @@ public class BallController : MonoBehaviour
         ball.maxAngularVelocity = 1000;
         position = transform.position;
         lineTrajectory = GameObject.Find("Line").GetComponent<LineTrajectory>();
+        cameraFollow = Camera.main.GetComponent<CameraController>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        livesManager = GameObject.Find("Lives").GetComponent<LivesManager>();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -22,8 +28,19 @@ public class BallController : MonoBehaviour
         // Check if the collision is with the wall
         if (collision.gameObject.CompareTag("BallCatcher"))
         {
+            livesManager.CheckIfPlayerLosesALife();
             // Reset the ball to its original position
             ResetToOriginalPosition();
+
+            if (cameraFollow != null)
+            {
+                cameraFollow.ResetCamera();
+            }
+
+            if (player != null)
+            {
+                player.ResetPlayer();
+            }
         }
     }
 

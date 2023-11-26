@@ -7,6 +7,7 @@ public class LineTrajectory : MonoBehaviour
 {
     public Transform ball;
     public Slider powerSlider;
+    public PlayerController player;
     private GameManager manager;
 
     public float maxDistanceX = 10f;
@@ -28,6 +29,7 @@ public class LineTrajectory : MonoBehaviour
     {
         InitializeComponents();
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
 
     }
 
@@ -44,6 +46,11 @@ public class LineTrajectory : MonoBehaviour
         {
             isPowerAdjustable = false;
             shotPower = powerSlider.value;
+            player.isMoving = true;
+            while (player.isMoving)
+            {
+                player.MoveTowardsBall();
+            }
             Shoot();
         }
     }
