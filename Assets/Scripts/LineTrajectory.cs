@@ -37,7 +37,7 @@ public class LineTrajectory : MonoBehaviour
 
     private void Update()
     {
-        while (lives.IsGameActive())
+        if (lives.IsGameActive())
         {
             if (isPowerAdjustable)
             {

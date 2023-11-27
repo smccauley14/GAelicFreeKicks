@@ -1,11 +1,22 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public Transform ball;  // Reference to the first object.
-    public Transform nets;  // Reference to the second object.
+    [SerializeField]
+    private Transform ball;  // Reference to the first object.
+    [SerializeField]
+    private Transform nets;  // Reference to the second object.
+    [SerializeField]
+    private GameObject player;
+    [SerializeField]
+    private GameObject goalkeeper;
+    [SerializeField]
+    private Button restartButton;
     public TextMeshProUGUI distanceUIDisplay;
+    public TextMeshProUGUI gameOverUIDisplay;
     private string distanceFromGoals = string.Empty;
 
 
@@ -18,5 +29,20 @@ public class GameManager : MonoBehaviour
         distanceFromGoals = distance.ToString("F2");
 
         distanceUIDisplay.text = "Distance: " + distanceFromGoals + " m";
+    }
+
+    public void GameOver()
+    {
+        ball.gameObject.SetActive(false);
+        nets.gameObject.SetActive(false);
+        player.SetActive(false);
+        goalkeeper.SetActive(false);
+        gameOverUIDisplay.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

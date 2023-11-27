@@ -4,6 +4,7 @@ using UnityEngine;
 public class LivesManager : MonoBehaviour
 {
     private ScoreManager scoreManager;
+    private GameManager gameManager;
     public TextMeshProUGUI livesUIDisplay;
     private int lives = 3;
     private bool isPlayerOutOfLives = false;
@@ -11,6 +12,7 @@ public class LivesManager : MonoBehaviour
     void Start()
     {
         scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         livesUIDisplay.text = "Lives: " + lives;
     }
 
@@ -22,13 +24,21 @@ public class LivesManager : MonoBehaviour
             lives--;
             livesUIDisplay.text = "Lives: " + lives;
             if (lives <= 0)
+            {
                 isPlayerOutOfLives = true;
+                gameManager.GameOver();
+            }
+                
 
         }
-
         //reset value for next shot
         scoreManager.hasPlayerScored = false;
     }
 
     public bool IsGameActive() => !isPlayerOutOfLives;
+
+    private void GameOver()
+    {
+        isPlayerOutOfLives = true;
+    }
 }
