@@ -9,6 +9,7 @@ public class LineTrajectory : MonoBehaviour
     public Slider powerSlider;
     public PlayerController player;
     private GameManager manager;
+    private LivesManager lives;
 
     public float maxDistanceX = 10f;
     public float maxDistanceY = 10f;
@@ -25,33 +26,37 @@ public class LineTrajectory : MonoBehaviour
     private float yRange = 0;
     public bool isPowerAdjustable = true;
 
-    private void Start()
+    private void Awake()
     {
         InitializeComponents();
         manager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        lives = GameObject.Find("Lives").GetComponent<LivesManager>();
 
     }
 
     private void Update()
     {
-        if (isPowerAdjustable)
+        while (lives.IsGameActive())
         {
-            HandleInput();
-            UpdateLinePosition();
-            manager.SetDistanceFromGoals();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isPowerAdjustable = false;
-            shotPower = powerSlider.value;
-            player.isMoving = true;
-            while (player.isMoving)
+            if (isPowerAdjustable)
             {
-                player.MoveTowardsBall();
+                HandleInput();
+                UpdateLinePosition();
+                manager.SetDistanceFromGoals();
             }
-            Shoot();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                isPowerAdjustable = false;
+                shotPower = powerSlider.value;
+                player.isMoving = true;
+                while (player.isMoving)
+                {
+                    player.MoveTowardsBall();
+                }
+                Shoot();
+            }
         }
     }
 
@@ -86,10 +91,12 @@ public class LineTrajectory : MonoBehaviour
     {
         endPosition = new Vector3(initialPosition.x + lastDistanceX, initialPosition.y + lastDistanceY, initialPosition.z);
         lineRenderer.SetPosition(0, endPosition);
+        gameObject.SetActive(true);
     }
 
     private void Shoot()
     {
+        gameObject.SetActive(false);
         float forceMagnitude = shotPower * 100;
         Vector3 forceDirection = (lineRenderer.GetPosition(0) - lineRenderer.GetPosition(1)).normalized;
         ballRigidbody.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
@@ -105,6 +112,7 @@ public class LineTrajectory : MonoBehaviour
 
     public void ResetLineAim()
     {
+
         lastDistanceX = 0;
         lastDistanceY = 0;
         UpdateLinePosition();

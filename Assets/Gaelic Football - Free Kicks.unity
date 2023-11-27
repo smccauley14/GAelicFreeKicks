@@ -298,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ball: {fileID: 641726812}
   powerSlider: {fileID: 882473852}
-  player: {fileID: 0}
+  player: {fileID: 1806457664}
   maxDistanceX: 10
   maxDistanceY: 10
   isPowerAdjustable: 1
@@ -917,7 +917,7 @@ MonoBehaviour:
   maxPower: 0
   nets: {fileID: 1548687684}
   cameraFollow: {fileID: 963194229}
-  livesManager: {fileID: 0}
+  livesManager: {fileID: 1900218661}
   player: {fileID: 1806457664}
 --- !u!1 &705507993
 GameObject:
@@ -1412,7 +1412,6 @@ MonoBehaviour:
   ball: {fileID: 641726812}
   nets: {fileID: 1548687684}
   distanceUIDisplay: {fileID: 1578963679}
-  playerScored: 0
 --- !u!4 &1040543808
 Transform:
   m_ObjectHideFlags: 0
@@ -2495,7 +2494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a271f56c084434280c87ffac5e485c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  livesUIDisplay: {fileID: 0}
+  livesUIDisplay: {fileID: 585958919}
 --- !u!4 &1900218662
 Transform:
   m_ObjectHideFlags: 0

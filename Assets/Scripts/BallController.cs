@@ -12,7 +12,7 @@ public class BallController : MonoBehaviour
     private Vector3 position;
     private LineTrajectory lineTrajectory;
 
-    private void Awake()
+    private void Start()
     {
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
@@ -29,22 +29,11 @@ public class BallController : MonoBehaviour
         if (collision.gameObject.CompareTag("BallCatcher"))
         {
             livesManager.CheckIfPlayerLosesALife();
-            // Reset the ball to its original position
-            ResetToOriginalPosition();
-
-            if (cameraFollow != null)
-            {
-                cameraFollow.ResetCamera();
-            }
-
-            if (player != null)
-            {
-                player.ResetPlayer();
-            }
+            SetBallToRandomPosition();
         }
     }
 
-    private void ResetToOriginalPosition()
+    private void SetBallToRandomPosition()
     {
         // Generate a random position within a specified range
         float randomX = Random.Range(-40, 40);
@@ -53,13 +42,23 @@ public class BallController : MonoBehaviour
 
         // Set the position of the ball to the random coordinates
         transform.position = new Vector3(randomX, randomY, randomZ);
-        // You might also want to reset any velocity or other properties of the Rigidbody
+
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
         Quaternion target = Quaternion.Euler(0, 0, 0);
         transform.rotation = target;
         lineTrajectory.isPowerAdjustable = true;
         lineTrajectory.ResetLineAim();
+
+        if (cameraFollow != null)
+        {
+            cameraFollow.ResetCamera();
+        }
+
+        if (player != null)
+        {
+            player.ResetPlayer();
+        }
 
     }
 }

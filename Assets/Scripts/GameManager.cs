@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour
     public Transform nets;  // Reference to the second object.
     public TextMeshProUGUI distanceUIDisplay;
     private string distanceFromGoals = string.Empty;
-    public bool playerScored;
 
 
     public void SetDistanceFromGoals()
