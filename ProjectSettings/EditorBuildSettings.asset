@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Gaelic Football - Free Kicks.unity
+    guid: b330af107316f3a41851515c45f81cf3
   m_configObjects: {}

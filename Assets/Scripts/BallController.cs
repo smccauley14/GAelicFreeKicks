@@ -10,14 +10,14 @@ public class BallController : MonoBehaviour
     private Rigidbody ball;
     private float angle;
     private Vector3 position;
-    private LineTrajectory lineTrajectory;
+    private AimAndShoot lineTrajectory;
 
     private void Start()
     {
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
         position = transform.position;
-        lineTrajectory = GameObject.Find("Line").GetComponent<LineTrajectory>();
+        lineTrajectory = GameObject.Find("Line").GetComponent<AimAndShoot>();
         cameraFollow = Camera.main.GetComponent<CameraController>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         livesManager = GameObject.Find("Lives").GetComponent<LivesManager>();
@@ -48,7 +48,7 @@ public class BallController : MonoBehaviour
         Quaternion target = Quaternion.Euler(0, 0, 0);
         transform.rotation = target;
         lineTrajectory.isPowerAdjustable = true;
-        lineTrajectory.ResetLineAim();
+        lineTrajectory.ResetAim();
 
         if (cameraFollow != null)
         {
