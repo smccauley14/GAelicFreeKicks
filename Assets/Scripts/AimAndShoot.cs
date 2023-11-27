@@ -8,8 +8,8 @@ public class AimAndShoot : MonoBehaviour
     public Transform ball;
     public Slider powerSlider;
     public PlayerController player;
-    private GameManager manager;
-    private LivesManager lives;
+    private GameManager gameManager;
+    private LivesManager livesManager;
 
     public float maxDistanceX = 10f;
     public float maxDistanceY = 10f;
@@ -29,21 +29,19 @@ public class AimAndShoot : MonoBehaviour
     private void Awake()
     {
         InitializeComponents();
-        manager = GameObject.Find("GameManager").GetComponent<GameManager>();
-        player = GameObject.Find("Player").GetComponent<PlayerController>();
-        lives = GameObject.Find("Lives").GetComponent<LivesManager>();
+        FindGameObjects();
 
     }
 
     private void Update()
     {
-        if (lives.IsGameActive())
+        if (livesManager.IsGameActive())
         {
             if (isPowerAdjustable)
             {
                 HandleInput();
                 UpdateAim();
-                manager.SetDistanceFromGoals();
+                gameManager.SetDistanceFromGoals();
             }
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -71,6 +69,13 @@ public class AimAndShoot : MonoBehaviour
         defaultShotDirection = (lineRenderer.GetPosition(1) - lineRenderer.GetPosition(0)).normalized;
         powerSlider.onValueChanged.AddListener(HandlePowerAdjustment);
         ballRigidbody = ball.GetComponent<Rigidbody>();
+    }
+
+    private void FindGameObjects()
+    {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
+        livesManager = GameObject.Find("Lives").GetComponent<LivesManager>();
     }
 
     private void HandleInput()
