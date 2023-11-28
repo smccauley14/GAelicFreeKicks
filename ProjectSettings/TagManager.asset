@@ -8,6 +8,7 @@ TagManager:
   - Goal
   - Ball
   - BallCatcher
+  - Sideline
   layers:
   - Default
   - TransparentFX
