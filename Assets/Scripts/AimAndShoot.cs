@@ -27,7 +27,7 @@ public class AimAndShoot : MonoBehaviour
     public bool isPowerAdjustable = true;
     public bool hasShot = false;
 
-    private void Awake()
+    private void Start()
     {
         InitializeComponents();
         FindGameObjects();

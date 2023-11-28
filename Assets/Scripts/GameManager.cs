@@ -9,12 +9,20 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform nets;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject goalkeeper;
+    [SerializeField] private GameObject titleScreen;
+    [SerializeField] private GameObject powerSlider;
+    [SerializeField] private TextMeshProUGUI powerUIText;
+    [SerializeField] private TextMeshProUGUI scoreUIText;
+    [SerializeField] private TextMeshProUGUI livesUIText;
+    [SerializeField] private TextMeshProUGUI distanceUIText;
+    [SerializeField] private TextMeshProUGUI highScoreUIText;
+    [SerializeField] private TextMeshProUGUI instructionsUIText;
     [SerializeField] private Button restartButton;
 
     public TextMeshProUGUI distanceUIDisplay;
     public TextMeshProUGUI gameOverUIDisplay;
 
-    private void Start()
+    public void StartGame()
     {
         InitializeGame();
     }
@@ -24,6 +32,9 @@ public class GameManager : MonoBehaviour
         // Set initial UI states
         gameOverUIDisplay.gameObject.SetActive(false);
         restartButton.gameObject.SetActive(false);
+        titleScreen.SetActive(false);
+        highScoreUIText.gameObject.SetActive(false);
+        instructionsUIText.gameObject.SetActive(false);
 
         // Set initial game object states
         SetObjectsActiveState(true);
@@ -35,6 +46,11 @@ public class GameManager : MonoBehaviour
         nets.gameObject.SetActive(isActive);
         player.SetActive(isActive);
         goalkeeper.SetActive(isActive);
+        scoreUIText.gameObject.SetActive(isActive);
+        livesUIText.gameObject.SetActive(isActive);
+        distanceUIText.gameObject.SetActive(isActive);
+        powerSlider.SetActive(isActive);
+        powerUIText.gameObject.SetActive(isActive);
     }
 
     public void SetDistanceFromGoals()
@@ -54,5 +70,21 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ShowHighScores()
+    {
+        SetObjectsActiveState(false);
+        var isHighScoreDisplayed = highScoreUIText.gameObject.activeSelf;
+        highScoreUIText.gameObject.SetActive(!isHighScoreDisplayed);
+        instructionsUIText.gameObject.SetActive(false);
+    }
+
+    public void ShowInstructions()
+    {
+        SetObjectsActiveState(false);
+        var isInstructionsDisplayed = instructionsUIText.gameObject.activeSelf;
+        instructionsUIText.gameObject.SetActive(!isInstructionsDisplayed);
+        highScoreUIText.gameObject.SetActive(false);
     }
 }
