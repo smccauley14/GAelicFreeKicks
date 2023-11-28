@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BallController : MonoBehaviour
@@ -8,16 +9,43 @@ public class BallController : MonoBehaviour
     public LivesManager livesManager;
     public PlayerController player;
     private Rigidbody ball;
-    private AimAndShoot lineTrajectory;
+    private AimAndShoot aimAndShoot;
+
+    public float rollingStartTime;
+    private const float rollingCheckDuration = 5f; // Adjust as needed
+    private const float rollingVelocityThreshold = 5f; // Adjust as needed
 
     private void Start()
     {
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
-        lineTrajectory = GameObject.Find("Line").GetComponent<AimAndShoot>();
+        aimAndShoot = GameObject.Find("Line").GetComponent<AimAndShoot>();
         cameraFollow = Camera.main.GetComponent<CameraController>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         livesManager = GameObject.Find("Lives").GetComponent<LivesManager>();
+
+        
+    }
+
+    void FixedUpdate()
+    {
+        if (aimAndShoot.hasShot && Mathf.Abs(ball.velocity.z) < rollingVelocityThreshold)
+        {
+            // If the ball's z-axis velocity is below the threshold, start or update the rolling timer
+            if (rollingStartTime == 0f)
+            {
+                rollingStartTime = Time.time;
+            }
+            else if (Time.time - rollingStartTime > rollingCheckDuration)
+            {
+                HandleWallCollision();
+            }
+        }
+        else
+        {
+            // If the ball's velocity is above the threshold, reset the rolling timer
+            rollingStartTime = 0f;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -28,7 +56,7 @@ public class BallController : MonoBehaviour
         }
     }
 
-    private void HandleWallCollision()
+    public void HandleWallCollision()
     {
         livesManager.CheckIfPlayerLosesALife();
         SetBallToRandomPosition();
@@ -36,18 +64,18 @@ public class BallController : MonoBehaviour
 
     private void SetBallToRandomPosition()
     {
+        aimAndShoot.ResetAim();
+        ResetBallState();
+        
         Vector3 randomPosition = GenerateRandomPosition();
         while (Vector3.Distance(randomPosition, nets.position) > 55)
         {
             randomPosition = GenerateRandomPosition();
-        }
-        
+        }        
         transform.position = randomPosition;
+        ball.MovePosition(randomPosition);
 
-        ResetBallState();
-        lineTrajectory.isPowerAdjustable = true;
-        lineTrajectory.ResetAim();
-
+        aimAndShoot.isPowerAdjustable = true;
         ResetCameraAndPlayer();
     }
 

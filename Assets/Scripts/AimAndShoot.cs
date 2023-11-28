@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,8 +9,9 @@ public class AimAndShoot : MonoBehaviour
     public PlayerController player;
     private GameManager gameManager;
     private LivesManager livesManager;
+    private BallController ballController;
 
-    public float maxDistanceX = 10f;
+    public float maxDistanceX = 50f;
     public float maxDistanceY = 10f;
 
     private LineRenderer lineRenderer;
@@ -25,7 +25,7 @@ public class AimAndShoot : MonoBehaviour
     private float shotPower = 0f;
     private float yRange = 0;
     public bool isPowerAdjustable = true;
-    private bool hasShot = false;
+    public bool hasShot = false;
 
     private void Awake()
     {
@@ -50,22 +50,20 @@ public class AimAndShoot : MonoBehaviour
                 isPowerAdjustable = false;
                 shotPower = powerSlider.value;
                 player.isMoving = true;
-                StartCoroutine(MovePlayerAndShoot());
-                Shoot();
+                StartCoroutine(MovePlayerTowardsBall());
+
             }
         }
     }
 
-    private IEnumerator MovePlayerAndShoot()
+    private IEnumerator MovePlayerTowardsBall()
     {
         while (player.isMoving)
         {
             player.MoveTowardsBall();
             yield return null;
         }
-
         Shoot();
-        hasShot = true;
     }
 
     private void InitializeComponents()
@@ -75,7 +73,7 @@ public class AimAndShoot : MonoBehaviour
         lastDistanceY = 0;
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
-        lineRenderer.SetPosition(0, new Vector3(0,1,0));
+        lineRenderer.SetPosition(0, new Vector3(0, 1, 0));
         defaultShotDirection = (lineRenderer.GetPosition(1) - lineRenderer.GetPosition(0)).normalized;
         powerSlider.onValueChanged.AddListener(HandlePowerAdjustment);
         ballRigidbody = ball.GetComponent<Rigidbody>();
@@ -86,7 +84,9 @@ public class AimAndShoot : MonoBehaviour
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         livesManager = GameObject.Find("Lives").GetComponent<LivesManager>();
+        ballController = GameObject.Find("Ball").GetComponent<BallController>();
     }
+
 
     private void HandleInput()
     {
@@ -115,6 +115,8 @@ public class AimAndShoot : MonoBehaviour
         float forceMagnitude = shotPower * 100;
         Vector3 forceDirection = (lineRenderer.GetPosition(0) - lineRenderer.GetPosition(1)).normalized;
         ballRigidbody.AddForce(forceDirection * forceMagnitude, ForceMode.Impulse);
+        hasShot = true;
+        ballController.rollingStartTime = Time.time;
     }
 
     private void HandlePowerAdjustment(float value)
@@ -135,4 +137,3 @@ public class AimAndShoot : MonoBehaviour
     }
 }
 
-    
