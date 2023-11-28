@@ -8,15 +8,12 @@ public class BallController : MonoBehaviour
     public LivesManager livesManager;
     public PlayerController player;
     private Rigidbody ball;
-    private float angle;
-    private Vector3 position;
     private AimAndShoot lineTrajectory;
 
     private void Start()
     {
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
-        position = transform.position;
         lineTrajectory = GameObject.Find("Line").GetComponent<AimAndShoot>();
         cameraFollow = Camera.main.GetComponent<CameraController>();
         player = GameObject.Find("Player").GetComponent<PlayerController>();
@@ -25,31 +22,48 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // Check if the collision is with the wall
         if (collision.gameObject.CompareTag("BallCatcher"))
         {
-            livesManager.CheckIfPlayerLosesALife();
-            SetBallToRandomPosition();
+            HandleWallCollision();
         }
+    }
+
+    private void HandleWallCollision()
+    {
+        livesManager.CheckIfPlayerLosesALife();
+        SetBallToRandomPosition();
     }
 
     private void SetBallToRandomPosition()
     {
-        // Generate a random position within a specified range
+        Vector3 randomPosition = GenerateRandomPosition();
+        transform.position = randomPosition;
+
+        ResetBallState();
+        lineTrajectory.isPowerAdjustable = true;
+        lineTrajectory.ResetAim();
+
+        ResetCameraAndPlayer();
+    }
+
+    private Vector3 GenerateRandomPosition()
+    {
         float randomX = Random.Range(-40, 40);
         float randomY = Random.Range(0.5f, 0.5f);
         float randomZ = Random.Range(-47, 61);
 
-        // Set the position of the ball to the random coordinates
-        transform.position = new Vector3(randomX, randomY, randomZ);
+        return new Vector3(randomX, randomY, randomZ);
+    }
 
+    private void ResetBallState()
+    {
         ball.velocity = Vector3.zero;
         ball.angularVelocity = Vector3.zero;
-        Quaternion target = Quaternion.Euler(0, 0, 0);
-        transform.rotation = target;
-        lineTrajectory.isPowerAdjustable = true;
-        lineTrajectory.ResetAim();
+        transform.rotation = Quaternion.Euler(Vector3.zero);
+    }
 
+    private void ResetCameraAndPlayer()
+    {
         if (cameraFollow != null)
         {
             cameraFollow.ResetCamera();
@@ -59,6 +73,5 @@ public class BallController : MonoBehaviour
         {
             player.ResetPlayer();
         }
-
     }
 }

@@ -5,38 +5,48 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private Transform ball;  // Reference to the first object.
-    [SerializeField]
-    private Transform nets;  // Reference to the second object.
-    [SerializeField]
-    private GameObject player;
-    [SerializeField]
-    private GameObject goalkeeper;
-    [SerializeField]
-    private Button restartButton;
+    [SerializeField] private Transform ball;
+    [SerializeField] private Transform nets;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject goalkeeper;
+    [SerializeField] private Button restartButton;
+
     public TextMeshProUGUI distanceUIDisplay;
     public TextMeshProUGUI gameOverUIDisplay;
-    private string distanceFromGoals = string.Empty;
 
+    private void Start()
+    {
+        InitializeGame();
+    }
+
+    private void InitializeGame()
+    {
+        // Set initial UI states
+        gameOverUIDisplay.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+
+        // Set initial game object states
+        SetObjectsActiveState(true);
+    }
+
+    private void SetObjectsActiveState(bool isActive)
+    {
+        ball.gameObject.SetActive(isActive);
+        nets.gameObject.SetActive(isActive);
+        player.SetActive(isActive);
+        goalkeeper.SetActive(isActive);
+    }
 
     public void SetDistanceFromGoals()
     {
-        // Calculate the distance between the two objects.
         float distance = Vector3.Distance(ball.position, nets.position);
-
-        // Convert the distance to a string with two decimal places.
-        distanceFromGoals = distance.ToString("F2");
-
-        distanceUIDisplay.text = "Distance: " + distanceFromGoals + " m";
+        string distanceString = distance.ToString("F2");
+        distanceUIDisplay.text = "Distance: " + distanceString + " m";
     }
 
     public void GameOver()
     {
-        ball.gameObject.SetActive(false);
-        nets.gameObject.SetActive(false);
-        player.SetActive(false);
-        goalkeeper.SetActive(false);
+        SetObjectsActiveState(false);
         gameOverUIDisplay.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
     }
