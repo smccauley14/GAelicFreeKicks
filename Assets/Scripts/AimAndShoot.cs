@@ -25,6 +25,7 @@ public class AimAndShoot : MonoBehaviour
     private float shotPower = 0f;
     private float yRange = 0;
     public bool isPowerAdjustable = true;
+    private bool hasShot = false;
 
     private void Awake()
     {
@@ -44,18 +45,27 @@ public class AimAndShoot : MonoBehaviour
                 gameManager.SetDistanceFromGoals();
             }
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && !hasShot)
             {
                 isPowerAdjustable = false;
                 shotPower = powerSlider.value;
                 player.isMoving = true;
-                while (player.isMoving)
-                {
-                    player.MoveTowardsBall();
-                }
+                StartCoroutine(MovePlayerAndShoot());
                 Shoot();
             }
         }
+    }
+
+    private IEnumerator MovePlayerAndShoot()
+    {
+        while (player.isMoving)
+        {
+            player.MoveTowardsBall();
+            yield return null;
+        }
+
+        Shoot();
+        hasShot = true;
     }
 
     private void InitializeComponents()
@@ -121,6 +131,7 @@ public class AimAndShoot : MonoBehaviour
         lastDistanceX = 0;
         lastDistanceY = 0;
         UpdateAim();
+        hasShot = false;
     }
 }
 

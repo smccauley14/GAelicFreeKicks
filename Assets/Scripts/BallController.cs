@@ -22,7 +22,7 @@ public class BallController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("BallCatcher"))
+        if (collision.gameObject.CompareTag("BallCatcher") || collision.gameObject.CompareTag("Sideline"))
         {
             HandleWallCollision();
         }
@@ -37,6 +37,11 @@ public class BallController : MonoBehaviour
     private void SetBallToRandomPosition()
     {
         Vector3 randomPosition = GenerateRandomPosition();
+        while (Vector3.Distance(randomPosition, nets.position) > 55)
+        {
+            randomPosition = GenerateRandomPosition();
+        }
+        
         transform.position = randomPosition;
 
         ResetBallState();
